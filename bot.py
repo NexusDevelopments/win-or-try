@@ -11,6 +11,11 @@ intents.message_content = True
 bot = commands.Bot(command_prefix='-', intents=intents)
 
 
+def get_bot_token():
+    # this checks env vars from railway/local so token gets picked up right
+    return os.getenv("DISCORD_TOKEN") or os.getenv("BOT_TOKEN") or os.getenv("TOKEN")
+
+
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user} (ID: {bot.user.id})")
@@ -35,9 +40,9 @@ async def roll(ctx: commands.Context):
 
 
 def main():
-    token = os.getenv("DISCORD_TOKEN")
+    token = get_bot_token()
     if not token:
-        raise RuntimeError("Set the DISCORD_TOKEN environment variable before running the bot.")
+        raise RuntimeError("no bot token env var found. set DISCORD_TOKEN (or BOT_TOKEN/TOKEN) in railway vars.")
 
     bot.run(token)
 

@@ -22,8 +22,10 @@ Open `http://localhost:3000`.
 1. Push this folder to your GitHub repo.
 2. In Railway, create a project from that GitHub repo.
 3. Railway will use the `Dockerfile` automatically.
-4. Add env variable:
+4. Add Railway Variable (any one of these names works):
    - `DISCORD_TOKEN` = your bot token
+   - `BOT_TOKEN` = your bot token
+   - `TOKEN` = your bot token
 5. Deploy.
 
 Optional env:
@@ -32,5 +34,5 @@ Optional env:
 
 ## Notes
 
-- Keep `DISCORD_TOKEN` in Railway environment variables, not in code.
+- Keep bot token in Railway Variables, not in code.
 - The panel starts/stops the bot process inside the same Railway service.

@@ -6,6 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const BOT_FILE = path.join(__dirname, "bot.py");
 const PYTHON_BIN = process.env.PYTHON_BIN || (process.platform === "win32" ? "python" : "python3");
+const TOKEN_ENV_KEYS = ["DISCORD_TOKEN", "BOT_TOKEN", "TOKEN"];
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -23,18 +24,30 @@ function addLog(line) {
 }
 
 function statusPayload() {
+  const tokenEnvKey = TOKEN_ENV_KEYS.find((key) => !!process.env[key]) || null;
   return {
     running: !!botProcess,
     pid: botProcess ? botProcess.pid : null,
     startedAt,
     pythonBin: PYTHON_BIN,
     botFile: BOT_FILE,
+    hasToken: !!tokenEnvKey,
+    tokenEnvKey,
   };
 }
 
 function startBot() {
   if (botProcess) {
     return { ok: false, message: "Bot is already running.", status: statusPayload() };
+  }
+
+  const tokenEnvKey = TOKEN_ENV_KEYS.find((key) => !!process.env[key]);
+  if (!tokenEnvKey) {
+    return {
+      ok: false,
+      message: "No token env var found. Set DISCORD_TOKEN (or BOT_TOKEN/TOKEN) in Railway variables.",
+      status: statusPayload(),
+    };
   }
 
   botProcess = spawn(PYTHON_BIN, [BOT_FILE], {
@@ -45,7 +58,7 @@ function startBot() {
   });
   startedAt = new Date().toISOString();
 
-  addLog(`Started bot process (PID ${botProcess.pid}).`);
+  addLog(`Started bot process (PID ${botProcess.pid}) using ${tokenEnvKey}.`);
 
   botProcess.stdout.on("data", (data) => {
     addLog(`[stdout] ${String(data).trimEnd()}`);

@@ -114,15 +114,15 @@ function App() {
             <li><strong>Started</strong> {formatTime(status.startedAt)}</li>
             <li><strong>Uptime</strong> {botUptime}</li>
             <li><strong>Python</strong> {status.pythonBin || "python"}</li>
+            <li><strong>Token Var</strong> {status.tokenEnvKey || "missing"}</li>
           </ul>
         </article>
 
         <article className="card">
           <h2>Runtime Notes</h2>
           <p>
-            bot runs from this pc and uses your
-            <strong> DISCORD_TOKEN </strong>
-            env var that u already got.
+            bot runs from this pc and pulls token from railway vars.
+            it checks <strong>DISCORD_TOKEN</strong>, then <strong>BOT_TOKEN</strong>, then <strong>TOKEN</strong>.
           </p>
           <p>
             if it dont start, check logs for python path, missing packages,
