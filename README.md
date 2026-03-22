@@ -2,6 +2,7 @@
 
 This project has:
 - A Discord bot in `bot.py` with `-roll`
+- A Discord ticket system with setup, panel, logs, and transcripts
 - A web panel in React to start, stop, restart, and view logs
 - A Node backend in `server.js` that controls the Python bot process
 
@@ -16,6 +17,26 @@ npm start
 ```
 
 Open `http://localhost:3000`.
+
+## Ticket system
+
+Admin only config:
+
+```text
+-ticket setup #panel-channel #log-channel
+-ticket panel
+-ticket config
+```
+
+Ticket use:
+
+```text
+-close
+```
+
+- `-ticket setup` saves the panel channel, log channel, and ticket category.
+- `-ticket panel` sends the open-ticket button panel.
+- Closing a ticket sends a transcript file to the log channel.
 
 ## Railway deploy
 
